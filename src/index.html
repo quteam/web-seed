@@ -3,11 +3,22 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>自动化网页开发</title>
+	<title>啦啦啦</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1,maximum-scale=1">
+	<script>
+		(function () {
+			function b() {
+				var c = document.documentElement.clientWidth || document.body.clientWidth;
+				document.documentElement.style.fontSize = c / 3.75 + 'px';
+			};
+			b();
+			window.onresize = b;
+		}());
+	</script>
 </head>
 
 <body>
-	<div id="app"></div>
+	<div id="app">Hello Web! <span>VERSION</span></div>
 </body>
 
 </html>
