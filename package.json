@@ -10,7 +10,7 @@
     "start": "node ./dist/service --production"
   },
   "webpackDefine": {
-    "VERSION": "'v1.0.0'"
+    "VERSION": "'v1.1.0'"
   },
   "buildRule": "base",
   "devPort": 8080,
