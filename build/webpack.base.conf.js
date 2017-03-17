@@ -1,12 +1,51 @@
 var path = require('path')
 var webpack = require('webpack')
+var autoprefixer = require('autoprefixer')
 var utils = require('./utils')
 var config = require('./config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var isProduction = process.env.NODE_ENV === 'production'
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
+
+const buildRules = [{
+    test: /\.(js|vue)$/,
+    loader: 'eslint-loader',
+    enforce: "pre",
+    include: [resolve('src'), resolve('test')],
+    options: {
+      formatter: require('eslint-friendly-formatter')
+    }
+  },
+  {
+    test: /\.vue$/,
+    loader: 'vue-loader',
+    options: vueLoaderConfig
+  },
+  {
+    test: /\.js$/,
+    loader: 'babel-loader',
+    include: [resolve('src'), resolve('test')]
+  },
+  {
+    test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+    loader: 'url-loader',
+    query: {
+      limit: 10000,
+      name: utils.assetsPath('img/[name].[hash:7].[ext]'),
+    }
+  },
+  {
+    test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+    loader: 'url-loader',
+    query: {
+      limit: 10000,
+      name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
+    }
+  }
+]
 
 module.exports = {
   target: "web",
@@ -33,44 +72,25 @@ module.exports = {
     }
   },
   module: {
-    rules: [{
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: "pre",
-        include: [resolve('src'), resolve('test')],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: vueLoaderConfig
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]'),
-        }
-      },
-      {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
-        }
-      }
-    ]
+    rules: buildRules
   },
   plugins: [
-    new webpack.DefinePlugin(config.package.webpackDefine || {})
+    new webpack.DefinePlugin(config.package.webpackDefine || {}),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [
+          autoprefixer({
+            browsers: [
+              'Android >= 4',
+              'Chrome >= 35',
+              'Firefox >= 31',
+              'iOS >= 8',
+              'Opera >= 12',
+              'Safari >= 7.1',
+            ]
+          }),
+        ]
+      }
+    })
   ]
 }

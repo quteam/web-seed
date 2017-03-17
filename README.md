@@ -36,6 +36,8 @@ npm run build
   "webpackDefine": {
     "VERSION": "'v1.0.0'"
   },
+  //开发模式 ['base','vue']， 默认为 base，
+  "buildRule": "base",
   //开发端口
   "devPort": 8080,
   "cdnUrl": ""

@@ -14,10 +14,18 @@ var env = config.build.env
 
 var webpackConfig = [merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({
+    rules: config.package.buildRule == 'vue' ? utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
       extract: true
-    })
+    }) : [{
+        test: /\.less$/,
+        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader', 'postcss-loader']
+      },
+    ]
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
@@ -34,6 +42,7 @@ var webpackConfig = [merge(baseWebpackConfig, {
       compress: {
         warnings: false
       },
+      comments: false,
       sourceMap: true
     }),
     // extract css into its own file
@@ -62,19 +71,20 @@ var webpackConfig = [merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     // split vendor js into its own file
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'common',
+    //   minChunks: function (module, count) {
+    //     // any required modules inside node_modules are extracted to vendor
+    //     return (
+    //       module.resource &&
+    //       /\.js$/.test(module.resource) &&
+    //       module.resource.indexOf(
+    //         path.join(__dirname, '../node_modules')
+    //       ) === 0
+    //     )
+    //   }
+    // }),
+
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     // new webpack.optimize.CommonsChunkPlugin({
