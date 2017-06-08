@@ -20,11 +20,6 @@ const buildRules = [{
     }
   },
   {
-    test: /\.vue$/,
-    loader: 'vue-loader',
-    options: vueLoaderConfig
-  },
-  {
     test: /\.js$/,
     loader: 'babel-loader',
     include: [resolve('src'), resolve('test')]
@@ -46,6 +41,14 @@ const buildRules = [{
     }
   }
 ]
+
+if (config.package.buildRule == 'vue') {
+  buildRules.push({
+    test: /\.vue$/,
+    loader: 'vue-loader',
+    options: vueLoaderConfig
+  })
+}
 
 module.exports = {
   target: "web",

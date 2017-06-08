@@ -27,7 +27,8 @@ module.exports = merge(baseWebpackConfig, {
           {
             loader: 'postcss-loader',
             options: {
-              sourceMap: true
+              sourceMap: true,
+              plugins: () => [require('autoprefixer')]
             }
           },
           {
